@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator zod {
+  provider       = "zod-prisma-types"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User will own a set of tasks
+// However, since this is a team task tracker
+// users should be able to see all tasks
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String
+  tasks Task[]
+
+  @@unique([email])
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String    @db.VarChar(255)
+  description String?
+  status      Status  @default(Pending)
+  deletedAt   DateTime?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@unique([title])
+}
+
+// Following: https://www.prisma.io/docs/orm/reference/prisma-schema-reference#naming-conventions-2
+enum Status {
+  Pending
+  InProgress
+  Completed
+}
+
+// TODO: Add TaskHistory and one-to-many relation(ie, one task has many taskhistories)

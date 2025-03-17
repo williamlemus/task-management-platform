@@ -37,3 +37,8 @@ pnpm dev
 - There is only one real page, that servers renders and gets the user. The other interactions are all client side.
 
 - The grid is responsive on both desktop and mobile
+
+  Demo:
+
+https://github.com/user-attachments/assets/a9c714d4-ca1a-4ba7-99aa-fdf11cf7ec02
+
